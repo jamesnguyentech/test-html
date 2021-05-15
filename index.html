@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      
+      const markersCoor = [{ lat: -25.344, lng: 131.036 }];
+      // Initialize and add the map
+      function initMap() {
+        // The map, centered at
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: { lat: 25.0175862, lng: 121.2261796 }, // Taipei capital of Taiwan
+        });
+        var bounds = new google.maps.LatLngBounds();
+
+        for(let i = 0; i < markersCoor.length; i++) {
+          // The marker
+          const marker = new google.maps.Marker({
+            position: markersCoor[i],
+            map: map,
+          });
+          bounds.extend(marker.getPosition());
+          marker.addListener("click", () => {
+              alert("abc");
+          
+              window.location.href = "uniwebview://game-over";
+          });
+        }
+        if (markersCoor.length != 0) {
+          //center the map to the geometric center of all markers
+          map.setCenter(bounds.getCenter());
+
+          map.fitBounds(bounds);
+
+          //remove one zoom level to ensure no marker is on the edge.
+          map.setZoom(map.getZoom()-1); 
+
+          // set a minimum zoom 
+          // if you got only 1 marker or all markers are on the same address map will be zoomed too much.
+          if(map.getZoom()> 15){
+            map.setZoom(15);
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!--The div element for the map -->
+    <div id="map" 
+      style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0%;left:0px;right:0px;bottom:0px" height="100%" width="100%"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrvF_72Mbgw4sDuy7BVnZbA1CS4I9R-o&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
